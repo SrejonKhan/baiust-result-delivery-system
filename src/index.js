@@ -10,6 +10,9 @@
 
 export default {
 	async fetch(request, env, ctx) {
-		return new Response('Hello World!');
+		const url = new URL(request.url);
+		const path = url.pathname.replace(/[/]$/, '');
+		console.log(request.method);
+		return new Response(`Hello World, BAIUST RESULT?! ${path}`);
 	},
 };
