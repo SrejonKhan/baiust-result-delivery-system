@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Results</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@next/css/pico.jade.min.css" />
+    <style>
+        .text-center {
+            text-align: center;
+        }
+
+        .text-bold {
+            font-weight: bold;
+        }
+
+        table>thead>tr>th {
+            background-color: #007a50 !important;
+            color: #fff;
+        }
+
+        .danger-bg {
+            background-color: #fae2e1 !important;
+        }
+
+        .danger-text {
+            color: #e6342d !important;
+        }
+
+        .danger-row {
+            background-color: #ffdddc !important;
+        }
+
+        .mt-1 {
+            margin-top: 0.75rem;
+        }
+
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <!----------------------------------------------------------------->
+        <!-- QUERY SECTION -->
+        <section id="query-section">
+            <hgroup>
+                <h2>Academic Result</h2>
+                <p>Insert your ID and Date of Birth to get your result.</p>
+            </hgroup>
+            <form id="query-form">
+                <label for="id">
+                    ID
+                    <input type="text" id="query-student-id" name="id" placeholder="08222xxxxxxx" required>
+                </label>
+
+                <label for="dob">
+                    Date of Birth
+                    <input type="date" id="query-student-dob" name="date-of-birth" required>
+                    <small>Date of Birth is used for verification purpose only.</small>
+                </label>
+
+                <!-- Button -->
+                <button aria-busy="false" type="submit">Submit</button>
+            </form>
+        </section>
+
+        <!----------------------------------------------------------------->
+        <!-- RESULT SECTION -->
+        <section id="result-section" style="display: block;">
+            <hgroup>
+                <h2>Result of Fall-2023</h2>
+                <p>Your result have been found. (In <em
+                        data-tooltip="Server-Side query time, not Client-Side execution time." id="query-time"></em>
+                    seconds)</p>
+            </hgroup>
+
+            <!-- Student Information Table -->
+            <table>
+                <tbody>
+                    <tr>
+                        <th><b>ID</b></th>
+                        <td id="result-student-id"></td>
+                    </tr>
+                    <tr>
+                        <th><b>Name</b></th>
+                        <td id="result-student-name"></td>
+                    </tr>
+                    <tr>
+                        <th><b>Semester</b></th>
+                        <td id="result-student-semester"></td>
+                    </tr>
+                    <tr>
+                        <th><b>CGPA Obtained</b></th>
+                        <td class="bold" id="result-student-cgpa"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Result Table -->
+            <div class="overflow-auto">
+                <table id="result-table" class="striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Course Code</th>
+                            <th scope="col">Course Name</th>
+                            <th scope="col">Credit</th>
+                            <th scope="col">Grade</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- Action Buttons -->
+            <section>
+                <div>
+                    <a class="text-bold secondary" id="share-btn">Share with Friends &
+                        Family</a>
+                </div>
+                <div class="mt-1">
+                    <a class="text-bold" id="check-another-btn">Check another?</a>
+                </div>
+            </section>
+
+            <!-- Motivation Section -->
+            <div id="motiv-section" style="display: none;">
+                <details>
+                    <summary role="button" class="text-bold outline contrast">A Special Message for you, <span
+                            class="motiv-student-name"></span> - (Click to Open)
+                    </summary>
+                    <!-- Motivation Quote -->
+                    <blockquote>
+                        "Failure should be our teacher, not our undertaker. Failure is delay, not defeat. It is a
+                        temporary
+                        detour, not a dead
+                        end."
+                        <footer>
+                            <cite>- Denis Waitley</cite>
+                        </footer>
+                    </blockquote>
+
+                    <!-- Special Message -->
+                    <p class="text-bold">Dear <span class="motiv-student-name"></span> (A Resilient Student),</p>
+
+                    <p>I know this moment may feel like a setback, but remember that failure is not the end—it's a
+                        stepping
+                        stone toward
+                        success. You've faced a challenge, and now it's time to rise above it. Use this experience as an
+                        opportunity to
+                        learn, grow, and redefine your path.</p>
+
+                    <p>Failure doesn't define you; it refines you. It's a chance to reassess your goals, identify areas
+                        for
+                        improvement, and
+                        develop a stronger, more resilient version of yourself. Embrace the lessons that come with
+                        failure,
+                        for they are
+                        often the most valuable ones on your journey.</p>
+
+                    <p>Every successful person has faced obstacles and setbacks. The key is not to avoid failure but to
+                        learn how to bounce
+                        back from it. Take a deep breath, acknowledge the disappointment, and then focus on the steps
+                        you
+                        can take to move
+                        forward.</p>
+
+                    <p>Remember, success is not measured by the absence of failure but by the courage to persevere
+                        despite
+                        it. Use this
+                        moment to tap into your inner strength, determination, and passion. Let failure be the fuel that
+                        propels you toward
+                        greater achievements.</p>
+
+                    <p>You are not alone in this journey. Seek support from friends, family, teachers, or mentors who
+                        believe in your
+                        potential. Together, we can turn this setback into a setup for a remarkable comeback.</p>
+
+                    <p>Believe in yourself, stay determined, and keep moving forward. Your journey doesn't end here;
+                        it's
+                        just taking a
+                        detour. The best is yet to come, and success is waiting for those who have the resilience to
+                        pursue
+                        it.</p>
+
+                    <p class="text-bold">YOU'VE GOT THIS!</p>
+                </details>
+            </div>
+        </section>
+
+        <!----------------------------------------------------------------->
+        <!-- ERROR BOX -->
+        <article id="error-box" class="danger-bg" style="display: none;">
+            <hgroup>
+                <h4 class="danger-text">Error</h4>
+                <p id="error-msg" class="danger-text"></p>
+            </hgroup>
+        </article>
+
+        <!----------------------------------------------------------------->
+        <!-- SHARE BOX -->
+        <dialog open>
+            <article>
+                <h2>Do you want to share?</h2>
+                <p>
+                    You can share your result as link, that can be sent to your FNF or even shared to social media.
+                </p>
+                <p>
+                    The following would be shared only:
+                </p>
+                <ul>
+                    <li>Your Name</li>
+                    <li>Current Semester</li>
+                    <li>CGPA Obtained</li>
+                    <li>Your Grade Table</li>
+                </ul>
+                <p>
+                    The following would NOT be shared:
+                </p>
+                <ul>
+                    <li>Your ID</li>
+                </ul>
+
+                <footer>
+                    <button className="secondary">
+                        Cancel
+                    </button>
+                    <button>Share</button>
+                </footer>
+            </article>
+        </dialog>
+
+
+    </main>
+    <script>
+        const showError = (msg) =>
+        {
+            $("#error-msg").text(msg);
+            $("#error-box").prop('hidden', false);
+
+            $("#query-form button").attr("aria-busy", "false");
+            $("#query-form button").prop('disabled', false);
+        };
+        const hideError = () =>
+        {
+            $("#error-box").hide();
+        };
+
+        const showQuerySection = () =>
+        {
+            hideResultSection();
+            $("#query-section").show();
+        };
+
+        const hideQuerySection = () =>
+        {
+            $("#query-section").hide();
+        };
+
+        const showResultSection = () =>
+        {
+            hideQuerySection();
+            $("#result-section").show();
+        };
+
+        const hideResultSection = () =>
+        {
+            $("#result-section").hide();
+            hideMotivSection();
+        };
+
+        const showMotivSection = () =>
+        {
+            $("#motiv-section").fadeIn();
+        };
+
+        const hideMotivSection = () =>
+        {
+            $("#motiv-section").hide();
+        };
+
+        const setSubmitBtnState = (busy) =>
+        {
+            // busyStr = busy.toString().toLowerCase();
+            $("#query-form button").attr("aria-busy", busy);
+            $("#query-form button").prop('disabled', busy);
+        };
+
+
+        $(document).ready(() =>
+        {
+            $("#check-another-btn").click(() =>
+            {
+                setSubmitBtnState(false);
+                showQuerySection();
+            });
+
+            // Handle query submit
+            $("#query-form").submit((e) =>
+            {
+                e.preventDefault();
+
+                // Show spinner and hide error message
+                setSubmitBtnState(true);
+                hideError();
+
+                // Validate inputs
+                const id = $("#query-student-id").val();
+                const dob = $("#query-student-dob").val();
+
+                if (!id || !dob) {
+                    showError("Please enter both ID and Date of Birth");
+                    $("#query-form button").attr("aria-busy", "false");
+                    return;
+                }
+
+                // Send request to server
+                const url = `/api/result/${id}/${dob.replace(/-/g, "-")}`;
+                $.ajax({
+                    url,
+                    method: "GET",
+                    dataType: "json",
+                    success: (data) =>
+                    {
+                        $("#query-time").text(data.duration);
+
+                        setSubmitBtnState(false);
+                        showResultSection();
+
+                        // Show information
+                        $("#result-student-id").text(data.id);
+                        $("#result-student-name").text(data.name);
+                        $("#result-student-semester").text(data.semester);
+                        $("#result-student-cgpa").text(data.cgpa);
+
+                        // Show Result in Table
+                        let isFailed = false;
+                        $("#result-table tbody").empty();
+
+                        data.courses.forEach((course) =>
+                        {
+                            let rowClass = "";
+                            if (course.status === "FAILED") {
+                                rowClass = "danger-row";
+                                isFailed = true;
+                            }
+
+                            $("#result-table tbody").append(`
+                                <tr>
+                                    <td class="${rowClass}">${course.course_code}</td>
+                                    <td class="${rowClass}">${course.course_title}</td>
+                                    <td class="${rowClass}">${course.credit}</td>
+                                    <td class="${rowClass}">${course.grade}</td>
+                                    <td class="${rowClass}">${course.status}</td>
+                                </tr>
+                            `);
+                        });
+
+                        // Show Motivational Words (if fail)
+                        if (isFailed) {
+                            showMotivSection();
+
+                            // set last name
+                            const lastName = data.name.split(' ').slice(-1).join(' ');
+                            $(".motiv-student-name").text(lastName);
+                        }
+                    },
+                    error: (error) =>
+                    {
+                        setSubmitBtnState(false);
+                        // Handle server errors
+                        if (error.status === 404) {
+                            showError("Result not found! Recheck your ID and Date of Birth.");
+
+                        } else {
+                            showError("Unexpected error from the server!");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
