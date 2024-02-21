@@ -1,16 +1,22 @@
 {
-  "name": "baiustresult",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "start": "wrangler dev"
-  },
-  "devDependencies": {
-    "wrangler": "^3.0.0"
-  },
-  "dependencies": {
-    "itty-router": "^4.0.27"
-  }
+	"name": "baiustresult",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"dev-remote": "wrangler dev --remote",
+		"start": "wrangler dev"
+	},
+	"devDependencies": {
+		"wrangler": "^3.0.0"
+	},
+	"dependencies": {
+		"itty-router": "^4.0.27",
+		"mustache": "^4.2.0"
+	},
+	"main": "index.js",
+	"author": "",
+	"license": "ISC",
+	"description": ""
 }
