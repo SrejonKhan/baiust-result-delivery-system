@@ -16,10 +16,26 @@ router
 		return json(list);
 	})
 	.get('/api/result/:id/:dob', async (request, env) => {
-		const result = {};
+		const id = request.params.id;
+		const dob = request.params.dob;
+
+		if (!id || !dob) {
+			return error(404, { msg: 'ID or DOB cannot be missing!' });
+		}
 		const startTime = performance.now();
 
+		const value = await env.DB.get(id);
 		const duration = ((performance.now() - startTime) / 1000).toFixed(2);
+
+		if (value === null) {
+			return error(404, { msg: 'Result not found! Recheck your ID and Date of Birth.' });
+		}
+
+		const result = JSON.parse(value);
+		if (result.dob != dob) {
+			return error(400, { msg: "DOB doesn't match with provided ID's credential." });
+		}
+
 		result.duration = duration;
 
 		return json(result);
