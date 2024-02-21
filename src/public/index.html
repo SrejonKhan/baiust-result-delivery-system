@@ -68,7 +68,7 @@
 
         <!----------------------------------------------------------------->
         <!-- RESULT SECTION -->
-        <section id="result-section" style="display: block;">
+        <section id="result-section" style="display: none;">
             <hgroup>
                 <h2>Result of Fall-2023</h2>
                 <p>Your result have been found. (In <em
@@ -201,7 +201,7 @@
 
         <!----------------------------------------------------------------->
         <!-- SHARE BOX -->
-        <dialog open>
+        <dialog id="share-modal">
             <article>
                 <h2>Do you want to share?</h2>
                 <p>
@@ -224,21 +224,38 @@
                 </ul>
 
                 <footer>
-                    <button className="secondary">
+                    <button id="share-cancel-btn" class="secondary">
                         Cancel
                     </button>
-                    <button>Share</button>
+                    <button aria-busy="false" id="share-submit-btn">Share</button>
                 </footer>
             </article>
         </dialog>
 
+        <!----------------------------------------------------------------->
+        <!-- SHARE BOX -->
+        <dialog id="share-success-modal">
+            <article>
+                <h2>Successfully Shared!</h2>
+                <p>
+                    This is the Link:
+                </p>
+                <a id="share-link-anchor" href="" target="_blank"></a>
+                <footer>
+                    <button id="share-success-cancel-btn" class="secondary">
+                        Close
+                    </button>
+                </footer>
+            </article>
+        </dialog>
 
     </main>
     <script>
         const showError = (msg) =>
         {
+            console.log(msg);
             $("#error-msg").text(msg);
-            $("#error-box").prop('hidden', false);
+            $("#error-box").show();
 
             $("#query-form button").attr("aria-busy", "false");
             $("#query-form button").prop('disabled', false);
@@ -246,6 +263,26 @@
         const hideError = () =>
         {
             $("#error-box").hide();
+        };
+
+        const showShareModal = () =>
+        {
+            $("#share-modal").attr("open", true);
+        };
+
+        const hideShareModal = () =>
+        {
+            $("#share-modal").removeAttr('open');
+        };
+
+        const showShareSuccessModal = () =>
+        {
+            $("#share-success-modal").attr("open", true);
+        };
+
+        const hideShareSuccessModal = () =>
+        {
+            $("#share-success-modal").removeAttr('open');
         };
 
         const showQuerySection = () =>
@@ -288,6 +325,11 @@
             $("#query-form button").prop('disabled', busy);
         };
 
+        const setShareModalSubmitBtnState = (busy) =>
+        {
+            $("#share-submit-btn").attr("aria-busy", busy);
+            $("#share-submit-btn").prop('disabled', busy);
+        };
 
         $(document).ready(() =>
         {
@@ -295,6 +337,61 @@
             {
                 setSubmitBtnState(false);
                 showQuerySection();
+            });
+
+            $("#share-btn").click(() =>
+            {
+                setSubmitBtnState(false);
+                showShareModal();
+            });
+
+            $("#share-cancel-btn").click(() =>
+            {
+                hideShareModal();
+            });
+
+            $("#share-submit-btn").click(() =>
+            {
+                setShareModalSubmitBtnState(true);
+
+                const id = $("#query-student-id").val();
+                const dob = $("#query-student-dob").val();
+
+                const url = `/api/share/`;
+                $.ajax({
+                    url,
+                    method: "POST",
+                    dataType: "json",
+                    data: JSON.stringify({
+                        id,
+                        dob
+                    }),
+                    contentType: "application/json",
+                    success: (data) =>
+                    {
+                        let shareUrl = `${window.location.host}/share/${data.shareId}`.replace("\/\/", "/");
+                        shareUrl = `${window.location.protocol}//${shareUrl}`;
+
+                        $("#share-link-anchor").attr("href", shareUrl);
+                        $("#share-link-anchor").text(shareUrl);
+
+                        setShareModalSubmitBtnState(false);
+                        hideShareModal();
+                        showShareSuccessModal();
+                    },
+                    error: (error) =>
+                    {
+                        console.log(error.responseJSON);
+                        setShareModalSubmitBtnState(false);
+                        hideShareModal();
+                        showError(error.responseJSON.msg);
+                    }
+                });
+            });
+
+            $("#share-success-cancel-btn").click(() =>
+            {
+                hideShareSuccessModal();
             });
 
             // Handle query submit
@@ -369,14 +466,10 @@
                     },
                     error: (error) =>
                     {
+                        console.log(error.responseJSON);
                         setSubmitBtnState(false);
                         // Handle server errors
-                        if (error.status === 404) {
-                            showError("Result not found! Recheck your ID and Date of Birth.");
-
-                        } else {
-                            showError("Unexpected error from the server!");
-                        }
+                        showError(error.responseJSON.msg);
                     }
                 });
             });
