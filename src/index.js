@@ -1,9 +1,11 @@
 import { error, json, Router, html } from 'itty-router';
+import Mustache from 'mustache';
 
 import indexHtml from './public/index.html';
 import notFoundHtml from './public/404.html';
 import maintenanceHtml from './public/maintenance.html';
 import preppingHtml from './public/prepping.html';
+import resultHtml from './public/result.html';
 
 const router = Router();
 
@@ -56,8 +58,8 @@ router
 		}
 
 		const result = JSON.parse(value);
-
-		return json(result);
+		const res = Mustache.render(resultHtml, result);
+		return html(res);
 	})
 	.post('/api/share', async (request, env) => {
 		const body = await request.json();

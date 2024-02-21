@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Results</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@next/css/pico.jade.min.css" />
+    <style>
+        .text-center {
+            text-align: center;
+        }
+
+        .text-bold {
+            font-weight: bold;
+        }
+
+        table>thead>tr>th {
+            background-color: #007a50 !important;
+            color: #fff;
+        }
+
+        .danger-bg {
+            background-color: #fae2e1 !important;
+        }
+
+        .danger-text {
+            color: #e6342d !important;
+        }
+
+        .danger-row {
+            background-color: #ffdddc !important;
+        }
+
+        .mt-1 {
+            margin-top: 0.75rem;
+        }
+
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <hgroup>
+            <h2>Result of Fall-2023</h2>
+        </hgroup>
+
+        <!-- Student Information Table -->
+        <table>
+            <tbody>
+                <tr>
+                    <th><b>Name</b></th>
+                    <td id="result-student-name">{{name}}</td>
+                </tr>
+                <tr>
+                    <th><b>Semester</b></th>
+                    <td id="result-student-semester">{{semester}}</td>
+                </tr>
+                <tr>
+                    <th><b>CGPA Obtained</b></th>
+                    <td class="bold" id="result-student-cgpa">{{cgpa}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Result Table -->
+        <div class="overflow-auto">
+            <table id="result-table" class="striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Course Code</th>
+                        <th scope="col">Course Name</th>
+                        <th scope="col">Credit</th>
+                        <th scope="col">Grade</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#courses}}
+                    <tr>
+                        <td>{{course_code}}</td>
+                        <td>{{course_title}}</td>
+                        <td>{{credit}}</td>
+                        <td>{{grade}}</td>
+                        <td>{{status}}</td>
+                    </tr>
+                    {{/courses}}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+
+</html>
