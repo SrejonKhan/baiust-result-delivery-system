@@ -58,6 +58,8 @@ router
 		}
 
 		const result = JSON.parse(value);
+		result.seoImage = `https://placehold.co/800x400/007a50/white?text=${encodeURIComponent(result.name + '`s Academic Result')}`;
+
 		const res = Mustache.render(resultHtml, result);
 		return html(res);
 	})
